@@ -1,7 +1,6 @@
 package com.example.t9ahowtodie.ui.components
 
 import android.util.Log
-import android.widget.ToggleButton
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,17 +15,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -43,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -84,8 +76,7 @@ fun TextFieldNumber(
         onValueChange = {// Otherwise just use "it"
             if (it.isEmpty()) currentValue = "1"
             else if (it.length <= MAX_ATTACKS_DIGITS) currentValue = it
-
-            textChangedCallback(it)
+            textChangedCallback(currentValue)
         },
         textStyle = TextStyle.Default.copy(fontSize = 24.sp),
         placeholder = {
@@ -96,13 +87,14 @@ fun TextFieldNumber(
             .clip(shape = RoundedCornerShape(40.dp))
             .width(120.dp),
         keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Done
+            imeAction = ImeAction.Done,
+            keyboardType = KeyboardType.Number
         ),
         colors = TextFieldDefaults.textFieldColors(
-            cursorColor = Color.Black,
-            disabledLabelColor = Color.Black,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
+            containerColor = MaterialTheme.colorScheme.secondary,
+            disabledLabelColor = MaterialTheme.colorScheme.secondary
+//            focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
+//            unfocusedIndicatorColor = MaterialTheme.colorScheme.secondary
         )
     )
 }
