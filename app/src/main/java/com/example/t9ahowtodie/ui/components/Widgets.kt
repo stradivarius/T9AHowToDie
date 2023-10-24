@@ -78,7 +78,8 @@ fun TextFieldNumber(
             else if (it.length <= MAX_ATTACKS_DIGITS) currentValue = it
             textChangedCallback(currentValue)
         },
-        textStyle = TextStyle.Default.copy(fontSize = 24.sp),
+        textStyle = TextStyle.Default.copy(fontSize = 24.sp,
+            color = MaterialTheme.colorScheme.primary),
         placeholder = {
             Text(text = "1", fontSize = 24.sp, color = MaterialTheme.colorScheme.primary)
         },
