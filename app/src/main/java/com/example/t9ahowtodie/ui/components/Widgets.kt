@@ -1,6 +1,7 @@
 package com.example.t9ahowtodie.ui.components
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -115,17 +117,19 @@ fun StatRadioButton(
             .border(
                 width = 1.dp,
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.secondary),
-
+                color = MaterialTheme.colorScheme.secondary
+            ),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = if(checked)
-                    MaterialTheme.colorScheme.secondary
-                        else
-                            MaterialTheme.colorScheme.primary),
+                .background(
+                    color = if (checked)
+                        MaterialTheme.colorScheme.secondary
+                    else
+                        MaterialTheme.colorScheme.primary
+                ),
             contentAlignment = Alignment.Center,
         ) {
             TextComponent(
@@ -157,10 +161,65 @@ fun SixRadioButtons(diceFaces: ArrayList<String>, checkedIndex: Int,
 }
 
 
+@Composable
+fun StatModifierToggleButton(
+    statuses: ArrayList<String>,
+    currentStatus: Int,
+    callback: () -> Unit
+) {
+    Card (
+        shape = CircleShape,
+        modifier = Modifier
+            .clickable {
+                callback()
+            }
+            .height(30.dp)
+            .width(160.dp)
+            .border(
+                width = 1.dp,
+                shape = CircleShape,
+                color = if (currentStatus == 0)
+                    MaterialTheme.colorScheme.secondary
+                else
+                    MaterialTheme.colorScheme.tertiary
+            ),
+        elevation = CardDefaults.cardElevation(4.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    color = if (currentStatus == 0)
+                        MaterialTheme.colorScheme.secondary
+                    else
+                        MaterialTheme.colorScheme.tertiary
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            TextComponent(
+                text = statuses[currentStatus],
+                size = 20.sp,
+                color = MaterialTheme.colorScheme.primary)
+        }
+    }
+
+}
+
+
 @Preview
 @Composable
 fun previewWidget() {
     T9AHowToDieTheme {
-        SixRadioButtons(arrayListOf("A", "2+", "3+", "4+", "5+", "6"), 3, {})
+        SixRadioButtons(arrayListOf("A", "2+", "3+", "4+", "5+", "6"), 3) {}
+    }
+}
+
+@Preview
+@Composable
+fun previewToggle() {
+    T9AHowToDieTheme {
+        StatModifierToggleButton(
+            arrayListOf("Reroll Success", "2+", "3+", "4+", "5+", "6"), 0
+        ) {}
     }
 }

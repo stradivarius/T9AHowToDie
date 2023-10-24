@@ -19,10 +19,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.t9ahowtodie.ui.AttackStatsStateEvents
 import com.example.t9ahowtodie.ui.AttackStatsViewModel
+import com.example.t9ahowtodie.ui.NORMAL
 import com.example.t9ahowtodie.ui.components.BackgroundImg
 import com.example.t9ahowtodie.ui.components.SixRadioButtons
+import com.example.t9ahowtodie.ui.components.StatModifierToggleButton
 import com.example.t9ahowtodie.ui.components.TextComponent
 import com.example.t9ahowtodie.ui.components.TextFieldNumber
+import com.example.t9ahowtodie.ui.statModifiers
 import com.example.t9ahowtodie.ui.theme.T9AHowToDieTheme
 
 @Composable
@@ -47,33 +50,87 @@ fun AttackStats(navHostController: NavHostController, viewModel: AttackStatsView
             })
         }
 
+        val paddingBetweenRows = 15.dp
+
         /* To Hit */
-        TextComponent(text = "To Hit", size = 20.sp,
-            modifier = Modifier.padding(horizontal = 10.dp))
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = paddingBetweenRows, horizontal = 5.dp)
+        ) {
+            TextComponent(text = "To Hit", size = 20.sp,
+                modifier = Modifier.padding(horizontal = 10.dp))
+            Spacer(modifier = Modifier.weight(1f))
+            StatModifierToggleButton(
+                statuses = statModifiers,
+                currentStatus = viewModel.attackStatsState.value.toHitModifier) {
+                viewModel.onEvent(AttackStatsStateEvents.toHitModify())
+            }
+        }
         SixRadioButtons(arrayListOf("A", "2+", "3+", "4+", "5+", "6"),
             checkedIndex = viewModel.attackStatsState.value.toHitIdx) {
             viewModel.onEvent(AttackStatsStateEvents.toHitChoice(it))
         }
 
         /* To Wound */
-        TextComponent(text = "To Wound", size = 20.sp,
-            modifier = Modifier.padding(horizontal = 10.dp))
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = paddingBetweenRows, horizontal = 5.dp)
+        ) {
+            TextComponent(text = "To Wound", size = 20.sp,
+                modifier = Modifier.padding(horizontal = 10.dp))
+            Spacer(modifier = Modifier.weight(1f))
+            StatModifierToggleButton(
+                statuses = statModifiers,
+                currentStatus = viewModel.attackStatsState.value.toWoundModifier) {
+                viewModel.onEvent(AttackStatsStateEvents.toWoundModify())
+            }
+        }
         SixRadioButtons(arrayListOf("A", "2+", "3+", "4+", "5+", "6"),
             checkedIndex = viewModel.attackStatsState.value.toWoundIdx) {
             viewModel.onEvent(AttackStatsStateEvents.toWoundChoice(it))
         }
 
         /* Armour Save */
-        TextComponent(text = "Armour Save", size = 20.sp,
-            modifier = Modifier.padding(horizontal = 10.dp))
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = paddingBetweenRows, horizontal = 5.dp)
+        ) {
+            TextComponent(text = "Armour Save", size = 20.sp,
+                modifier = Modifier.padding(horizontal = 10.dp))
+            Spacer(modifier = Modifier.weight(1f))
+            StatModifierToggleButton(
+                statuses = statModifiers,
+                currentStatus = viewModel.attackStatsState.value.armourSaveModifier) {
+                viewModel.onEvent(AttackStatsStateEvents.armourSaveModify())
+            }
+        }
         SixRadioButtons(arrayListOf("2+", "3+", "4+", "5+", "6", "N/A"),
             checkedIndex = viewModel.attackStatsState.value.armourSaveIdx) {
             viewModel.onEvent(AttackStatsStateEvents.armourSaveChoice(it))
         }
 
         /* Special Save */
-        TextComponent(text = "Special Save", size = 20.sp,
-            modifier = Modifier.padding(horizontal = 10.dp))
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = paddingBetweenRows, horizontal = 5.dp)
+        ) {
+            TextComponent(text = "Special Save", size = 20.sp,
+                modifier = Modifier.padding(horizontal = 10.dp))
+            Spacer(modifier = Modifier.weight(1f))
+            StatModifierToggleButton(
+                statuses = statModifiers,
+                currentStatus = viewModel.attackStatsState.value.specialSaveModifier) {
+                viewModel.onEvent(AttackStatsStateEvents.specialSaveModify())
+            }
+        }
         SixRadioButtons(arrayListOf("2+", "3+", "4+", "5+", "6", "N/A"),
             checkedIndex = viewModel.attackStatsState.value.specialSaveIdx) {
             viewModel.onEvent(AttackStatsStateEvents.specialSaveChoice(it))
@@ -89,11 +146,14 @@ fun AttackStats(navHostController: NavHostController, viewModel: AttackStatsView
             TextComponent(text = "Probability", size = 25.sp)
             Spacer(Modifier.weight(1f))
             TextComponent(
-                text = String.format("%.2f%%", viewModel.attackStatsState.value.probability),
+                text = String.format("%.2f%%", viewModel.attackStatsState.value.probability * 100),
                 size = 25.sp,
-                modifier = Modifier.border(width = 1.dp,
-                    color = MaterialTheme.colorScheme.secondary,
-                    shape = CircleShape)
+                modifier = Modifier
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.secondary,
+                        shape = CircleShape
+                    )
                     .padding(10.dp)
             )
         }
@@ -110,9 +170,12 @@ fun AttackStats(navHostController: NavHostController, viewModel: AttackStatsView
             TextComponent(
                 text = String.format("%.2f", viewModel.attackStatsState.value.averageAttacks),
                 size = 25.sp,
-                modifier = Modifier.border(width = 1.dp,
-                    color = MaterialTheme.colorScheme.secondary,
-                    shape = CircleShape)
+                modifier = Modifier
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.secondary,
+                        shape = CircleShape
+                    )
                     .padding(10.dp)
             )
         }
