@@ -7,6 +7,7 @@ import com.example.t9ahowtodie.ui.REROLL_FAILED
 import com.example.t9ahowtodie.ui.REROLL_ONES
 import com.example.t9ahowtodie.ui.REROLL_SIXES
 import com.example.t9ahowtodie.ui.REROLL_SUCCESS
+import kotlin.math.min
 import kotlin.math.pow
 
 
@@ -92,10 +93,10 @@ fun calculateAttackBaseProbability(chances : Double, modifier : Int = 0) : Doubl
             ( (chances / D6).pow(2) )
         }
         REROLL_ONES -> {
-            ( (chances / D6) + ( ( 1.0 / D6) * (chances / D6) ) )
+            min( (chances / D6) + ( ( 1.0 / D6) * (chances / D6) ), 1.0 )
         }
         REROLL_SIXES -> {
-            ( ( (chances - 1.0) / D6) + ( ( 1.0 / D6) * (chances / D6) ) )
+            min( ( (chances - 1.0) / D6) + ( ( 1.0 / D6) * (chances / D6) ), 1.0 )
         }
         else -> {
             Log.wtf("Probability", "This should never happen!")

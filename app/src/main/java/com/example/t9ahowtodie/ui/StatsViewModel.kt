@@ -192,7 +192,7 @@ data class AttackStatsState(
     var armourSaveModifier: Int = 0,
     var specialSaveModifier: Int = 0,
     var probability: Double = 1.0,
-    var averageAttacks: Double = 0.0
+    var averageAttacks: Double = 1.0
 )
 
 /* State of the test screen */
