@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -97,15 +100,22 @@ fun T9AHowToDie(attackStatsViewModel: StatsViewModel = StatsViewModel()) {
                     startDestination = Routes.SPLASH_SCREEN
                 ) {
 
-                    composable(route = Routes.SPLASH_SCREEN) {
+                    composable(route = Routes.SPLASH_SCREEN
+                    ) {
                         SplashScreen(navHostController)
                     }
 
-                    composable(route = Routes.ATTACKS_STATS) {
+                    composable(route = Routes.ATTACKS_STATS,
+                        enterTransition = {
+                            fadeIn(tween(200))
+                        }) {
                         AttackStats(navHostController, attackStatsViewModel)
                     }
 
-                    composable(route = Routes.TESTS_STATS) {
+                    composable(route = Routes.TESTS_STATS,
+                        enterTransition = {
+                            fadeIn(tween(200))
+                        }) {
                         TestStats(navHostController, attackStatsViewModel)
                     }
                 }

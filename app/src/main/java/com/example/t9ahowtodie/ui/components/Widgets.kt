@@ -95,7 +95,7 @@ fun TextFieldNumber(
             else if (it.length <= maxDigits) currentValue = it
             else if (it.length == maxDigits + 1 && maxDigits == 1) // This is a workaround
                 currentValue = it[maxDigits].toString()
-            if (it.toInt() > maxVal) currentValue = maxVal.toString()
+            else if (it.toInt() > maxVal) currentValue = maxVal.toString()
             textChangedCallback(currentValue)
         },
         textStyle = TextStyle.Default.copy(fontSize = 24.sp,
