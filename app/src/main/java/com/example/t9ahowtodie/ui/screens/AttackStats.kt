@@ -1,5 +1,6 @@
 package com.example.t9ahowtodie.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,9 +8,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,22 +22,36 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.t9ahowtodie.ui.AttackStatsStateEvents
-import com.example.t9ahowtodie.ui.AttackStatsViewModel
-import com.example.t9ahowtodie.ui.NORMAL
+import com.example.t9ahowtodie.ui.StatsViewModel
 import com.example.t9ahowtodie.ui.components.BackgroundImg
+import com.example.t9ahowtodie.ui.components.MAX_ATTACKS_DIGITS
 import com.example.t9ahowtodie.ui.components.SixRadioButtons
 import com.example.t9ahowtodie.ui.components.StatModifierToggleButton
 import com.example.t9ahowtodie.ui.components.TextComponent
 import com.example.t9ahowtodie.ui.components.TextFieldNumber
-import com.example.t9ahowtodie.ui.statModifiers
+import com.example.t9ahowtodie.ui.AttackStatModifiers
 import com.example.t9ahowtodie.ui.theme.T9AHowToDieTheme
 
 @Composable
-fun AttackStats(navHostController: NavHostController, viewModel: AttackStatsViewModel) {
+fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel) {
     BackgroundImg(blur = true)
 
+    BackHandler {
+        // do nothing
+    }
+
+    /* Fake LifeCycle Listener for Composables */
+    DisposableEffect(
+        key1 = viewModel,
+        effect = {// What to do when composable gets added
+            viewModel.onAttackStart()
+            this.onDispose { /* do nothing on composable disposed */ }
+        })
+
     Column(modifier = Modifier
-        .fillMaxSize()) {
+        .fillMaxSize()
+        .verticalScroll(rememberScrollState())
+    ) {
 
         /* Number of Attacks */
         Row (
@@ -45,8 +63,9 @@ fun AttackStats(navHostController: NavHostController, viewModel: AttackStatsView
             TextComponent(text = "# of Attacks", size = 30.sp)
             Spacer(modifier = Modifier.weight(1f))
             TextFieldNumber ( // Call the result update whenever changing the number of attacks
+                maxDigits = MAX_ATTACKS_DIGITS,
                 textChangedCallback = {
-                viewModel.onEvent(AttackStatsStateEvents.attacksNumberEntered(Integer.parseInt(it)))
+                viewModel.onAttack(AttackStatsStateEvents.attacksNumberEntered(Integer.parseInt(it)))
             })
         }
 
@@ -63,14 +82,14 @@ fun AttackStats(navHostController: NavHostController, viewModel: AttackStatsView
                 modifier = Modifier.padding(horizontal = 10.dp))
             Spacer(modifier = Modifier.weight(1f))
             StatModifierToggleButton(
-                statuses = statModifiers,
+                statuses = AttackStatModifiers,
                 currentStatus = viewModel.attackStatsState.value.toHitModifier) {
-                viewModel.onEvent(AttackStatsStateEvents.toHitModify())
+                viewModel.onAttack(AttackStatsStateEvents.toHitModify())
             }
         }
         SixRadioButtons(arrayListOf("A", "2+", "3+", "4+", "5+", "6"),
             checkedIndex = viewModel.attackStatsState.value.toHitIdx) {
-            viewModel.onEvent(AttackStatsStateEvents.toHitChoice(it))
+            viewModel.onAttack(AttackStatsStateEvents.toHitChoice(it))
         }
 
         /* To Wound */
@@ -84,14 +103,14 @@ fun AttackStats(navHostController: NavHostController, viewModel: AttackStatsView
                 modifier = Modifier.padding(horizontal = 10.dp))
             Spacer(modifier = Modifier.weight(1f))
             StatModifierToggleButton(
-                statuses = statModifiers,
+                statuses = AttackStatModifiers,
                 currentStatus = viewModel.attackStatsState.value.toWoundModifier) {
-                viewModel.onEvent(AttackStatsStateEvents.toWoundModify())
+                viewModel.onAttack(AttackStatsStateEvents.toWoundModify())
             }
         }
         SixRadioButtons(arrayListOf("A", "2+", "3+", "4+", "5+", "6"),
             checkedIndex = viewModel.attackStatsState.value.toWoundIdx) {
-            viewModel.onEvent(AttackStatsStateEvents.toWoundChoice(it))
+            viewModel.onAttack(AttackStatsStateEvents.toWoundChoice(it))
         }
 
         /* Armour Save */
@@ -105,14 +124,14 @@ fun AttackStats(navHostController: NavHostController, viewModel: AttackStatsView
                 modifier = Modifier.padding(horizontal = 10.dp))
             Spacer(modifier = Modifier.weight(1f))
             StatModifierToggleButton(
-                statuses = statModifiers,
+                statuses = AttackStatModifiers,
                 currentStatus = viewModel.attackStatsState.value.armourSaveModifier) {
-                viewModel.onEvent(AttackStatsStateEvents.armourSaveModify())
+                viewModel.onAttack(AttackStatsStateEvents.armourSaveModify())
             }
         }
         SixRadioButtons(arrayListOf("2+", "3+", "4+", "5+", "6", "N/A"),
             checkedIndex = viewModel.attackStatsState.value.armourSaveIdx) {
-            viewModel.onEvent(AttackStatsStateEvents.armourSaveChoice(it))
+            viewModel.onAttack(AttackStatsStateEvents.armourSaveChoice(it))
         }
 
         /* Special Save */
@@ -126,14 +145,14 @@ fun AttackStats(navHostController: NavHostController, viewModel: AttackStatsView
                 modifier = Modifier.padding(horizontal = 10.dp))
             Spacer(modifier = Modifier.weight(1f))
             StatModifierToggleButton(
-                statuses = statModifiers,
+                statuses = AttackStatModifiers,
                 currentStatus = viewModel.attackStatsState.value.specialSaveModifier) {
-                viewModel.onEvent(AttackStatsStateEvents.specialSaveModify())
+                viewModel.onAttack(AttackStatsStateEvents.specialSaveModify())
             }
         }
         SixRadioButtons(arrayListOf("2+", "3+", "4+", "5+", "6", "N/A"),
             checkedIndex = viewModel.attackStatsState.value.specialSaveIdx) {
-            viewModel.onEvent(AttackStatsStateEvents.specialSaveChoice(it))
+            viewModel.onAttack(AttackStatsStateEvents.specialSaveChoice(it))
         }
 
         /* Probability */
@@ -179,9 +198,6 @@ fun AttackStats(navHostController: NavHostController, viewModel: AttackStatsView
                     .padding(10.dp)
             )
         }
-
-
-
     }
 }
 
@@ -190,6 +206,6 @@ fun AttackStats(navHostController: NavHostController, viewModel: AttackStatsView
 @Composable
 private fun AttacksPreview() {
     T9AHowToDieTheme {
-        AttackStats(rememberNavController(), AttackStatsViewModel())
+        AttackStats(rememberNavController(), StatsViewModel())
     }
 }

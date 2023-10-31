@@ -44,9 +44,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.t9ahowtodie.ui.D6
 import com.example.t9ahowtodie.ui.theme.T9AHowToDieTheme
+import java.lang.Integer.min
 import java.util.ArrayList
 
 const val MAX_ATTACKS_DIGITS = 3
+const val MAX_TEST_DIGITS = 1
+const val MAX_DICE_ROWS = 8
 
 @Composable
 fun TextComponent(
@@ -65,10 +68,22 @@ fun TextComponent(
         modifier = modifier)
 }
 
+@Composable
+fun NavigationTextComponent(
+    text: String,
+) {
+    TextComponent(
+        text = text,
+        size = 12.sp,
+        color = MaterialTheme.colorScheme.secondary)
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextFieldNumber(
-    textChangedCallback: (text: String) -> Unit
+    maxDigits: Int,
+    textChangedCallback: (text: String) -> Unit,
+    maxVal: Int = Int.MAX_VALUE
 ) {
     var currentValue by remember{
         mutableStateOf("")
@@ -77,7 +92,10 @@ fun TextFieldNumber(
         value = currentValue,
         onValueChange = {// Otherwise just use "it"
             if (it.isEmpty()) currentValue = "1"
-            else if (it.length <= MAX_ATTACKS_DIGITS) currentValue = it
+            else if (it.length <= maxDigits) currentValue = it
+            else if (it.length == maxDigits + 1 && maxDigits == 1) // This is a workaround
+                currentValue = it[maxDigits].toString()
+            if (it.toInt() > maxVal) currentValue = maxVal.toString()
             textChangedCallback(currentValue)
         },
         textStyle = TextStyle.Default.copy(fontSize = 24.sp,
@@ -96,8 +114,6 @@ fun TextFieldNumber(
         colors = TextFieldDefaults.textFieldColors(
             containerColor = MaterialTheme.colorScheme.secondary,
             disabledLabelColor = MaterialTheme.colorScheme.secondary
-//            focusedIndicatorColor = MaterialTheme.colorScheme.secondary,
-//            unfocusedIndicatorColor = MaterialTheme.colorScheme.secondary
         )
     )
 }
@@ -158,6 +174,25 @@ fun SixRadioButtons(diceFaces: ArrayList<String>, checkedIndex: Int,
            }
        }
     }
+}
+
+@Composable
+fun RadioGrid(diceValues: List<String>, checkedIndex: Int,
+                    callback: (selected: Int) -> Unit) {
+    if (diceValues.size !in 0 .. D6 * MAX_DICE_ROWS)
+        throw IllegalStateException("Trying to roll a dice with illegal number of faces!")
+
+    for (row in 0 .. ((diceValues.size - 1).div(D6))) // Place 6 numbers each row
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween) {
+            for (i in (row * D6) until min((row + 1) * D6, diceValues.size)) {
+                StatRadioButton(text = diceValues[i], i == checkedIndex) {
+                    callback(i)
+                    Log.d("hey","callback $checkedIndex")
+                }
+            }
+        }
 }
 
 
