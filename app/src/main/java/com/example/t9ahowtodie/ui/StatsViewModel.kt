@@ -3,7 +3,9 @@ package com.example.t9ahowtodie.ui
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.t9ahowtodie.calculateAttackBaseProbability
+import com.example.t9ahowtodie.calculateTestBaseProbability
 import com.example.t9ahowtodie.calculateTestProbability
 import com.example.t9ahowtodie.chancesAttack
 import com.example.t9ahowtodie.chancesSave
@@ -15,12 +17,19 @@ import com.example.t9ahowtodie.probabilitySumLeqOnNDice
 const val TEST_SUM_EQUALS = false
 
 const val D6 = 6
+const val MIN_MAX_INSTANCES = 3
 
 const val NORMAL = 0
 const val REROLL_FAILED = 1
 const val REROLL_SUCCESS = 2
 const val REROLL_ONES = 3
 const val REROLL_SIXES = 4
+
+/* Just a list of strings corresponding to the input value */
+fun generateMaxMinInstances(instances: Int): List<String> {
+    return List(instances) { it.toString() }
+}
+
 val AttackStatModifiers = arrayListOf<String>(
     "Normal",
     "Reroll Failed",
@@ -33,6 +42,8 @@ val TestStatModifiers = arrayListOf<String>(
     "Reroll Failed",
     "Reroll Success"
 )
+val MinMaxModifier = ArrayList(generateMaxMinInstances(MIN_MAX_INSTANCES))
+
 
 
 class StatsViewModel: ViewModel() {
@@ -134,6 +145,16 @@ class StatsViewModel: ViewModel() {
                     testModifier = (testStatsState.value.testModifier + 1) % TestStatModifiers.size
                 )
             }
+            is TestStatsStateEvents.testMinimize -> {
+                testStatsState.value = testStatsState.value.copy(
+                    minimized = (testStatsState.value.minimized + 1) % MinMaxModifier.size
+                )
+            }
+            is TestStatsStateEvents.testMaximize -> {
+                testStatsState.value = testStatsState.value.copy(
+                    maximized = (testStatsState.value.maximized + 1) % MinMaxModifier.size
+                )
+            }
             else -> {
                 Log.v("onTest", "Event is null, screen has started.")
             }
@@ -142,19 +163,31 @@ class StatsViewModel: ViewModel() {
         testStatsState.value =
             testStatsState.value.copy(probabilityLeq =
             calculateTestProbability(
-                baseProbability = probabilitySumLeqOnNDice(
+//                baseProbability = probabilitySumLeqOnNDice(
+//                    nDice = testStatsState.value.diceNumber,
+//                    threshold = testStatsState.value.thresholdIdx +
+//                            testStatsState.value.diceNumber ),
+                baseProbability = calculateTestBaseProbability(
                     nDice = testStatsState.value.diceNumber,
                     threshold = testStatsState.value.thresholdIdx +
-                            testStatsState.value.diceNumber ),
+                            testStatsState.value.diceNumber,
+                    minimized = testStatsState.value.minimized,
+                    maximized = testStatsState.value.maximized,
+                    moreThan = false
+                ),
                 modifier = testStatsState.value.testModifier
             ))
         testStatsState.value =
             testStatsState.value.copy(probabilityGeq =
                 calculateTestProbability(
-                    baseProbability = probabilitySumGeqOnNDice(
+                    baseProbability = calculateTestBaseProbability(
                         nDice = testStatsState.value.diceNumber,
                         threshold = testStatsState.value.thresholdIdx +
-                                testStatsState.value.diceNumber ),
+                                testStatsState.value.diceNumber,
+                        minimized = testStatsState.value.minimized,
+                        maximized = testStatsState.value.maximized,
+                        moreThan = true
+                    ),
                     modifier = testStatsState.value.testModifier
                 ))
         if ( TEST_SUM_EQUALS ) // This won't be needed most of the times
@@ -200,6 +233,8 @@ data class TestStatsState(
     var diceNumber: Int = 1,
     var thresholdIdx: Int = 0,
     var testModifier: Int = 0,
+    var minimized: Int = 0,
+    var maximized: Int = 0,
     var probabilityLeq: Double = 1.0,
     var probabilityGeq: Double = 1.0,
     var probabilityEq: Double = 1.0
@@ -224,4 +259,6 @@ sealed class TestStatsStateEvents {
     data class diceNumberEntered(val diceNumber: Int) : TestStatsStateEvents()
     data class thresholdChoice(val threshold: Int) : TestStatsStateEvents()
     data class testModify(val modifier: Int = 1) : TestStatsStateEvents()
+    data class testMinimize(val instances: Int = 1) : TestStatsStateEvents()
+    data class testMaximize(val instances: Int = 1) : TestStatsStateEvents()
 }

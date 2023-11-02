@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.t9ahowtodie.ui.MinMaxModifier
 import com.example.t9ahowtodie.ui.StatsViewModel
 import com.example.t9ahowtodie.ui.TEST_SUM_EQUALS
 import com.example.t9ahowtodie.ui.TestStatModifiers
@@ -64,15 +65,15 @@ fun TestStats(navHostController: NavHostController, viewModel: StatsViewModel) {
             Spacer(modifier = Modifier.weight(1f))
             TextFieldNumber ( // Call the result update whenever changing the number of dice
                 maxDigits = MAX_TEST_DIGITS,
-                maxVal = 5,
-                textChangedCallback = {
+                maxVal = 7,
+                textChangedCallback = {7
                 viewModel.onTest(TestStatsStateEvents.diceNumberEntered(Integer.parseInt(it)))
             })
         }
 
         val paddingBetweenRows = 15.dp
 
-        /* The generated Threshold */
+        /* The generated Threshold and modifiers */
         Row (
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -88,6 +89,41 @@ fun TestStats(navHostController: NavHostController, viewModel: StatsViewModel) {
                 viewModel.onTest(TestStatsStateEvents.testModify())
             }
         }
+
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = paddingBetweenRows, horizontal = 5.dp)
+        ) {
+            TextComponent(text = "Min. Instances", size = 20.sp,
+                modifier = Modifier.padding(horizontal = 10.dp))
+            Spacer(Modifier.weight(1f))
+            StatModifierToggleButton(
+                statuses = MinMaxModifier,
+                currentStatus = viewModel.testStatsState.value.minimized) {
+                viewModel.onTest(TestStatsStateEvents.testMinimize())
+            }
+        }
+
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = paddingBetweenRows, horizontal = 5.dp)
+        ) {
+            TextComponent(text = "Max. Instances", size = 20.sp,
+                modifier = Modifier.padding(horizontal = 10.dp))
+            Spacer(Modifier.weight(1f))
+            StatModifierToggleButton(
+                statuses = MinMaxModifier,
+                currentStatus = viewModel.testStatsState.value.maximized) {
+                viewModel.onTest(TestStatsStateEvents.testMaximize())
+            }
+        }
+
+
+        /* Grid of Numbers */
         RadioGrid(
             diceValues = viewModel.numberOfValuesWithDice(
                 viewModel.testStatsState.value.diceNumber

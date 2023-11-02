@@ -1,10 +1,8 @@
 package com.example.t9ahowtodie
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.Box
@@ -26,6 +24,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -50,19 +49,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             T9AHowToDieTheme {
-
                 Surface (modifier = Modifier.fillMaxSize()) {
-
                     T9AHowToDie()
-
                 }
             }
         }
     }
-
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun T9AHowToDie(attackStatsViewModel: StatsViewModel = StatsViewModel()) {
@@ -89,7 +83,7 @@ fun T9AHowToDie(attackStatsViewModel: StatsViewModel = StatsViewModel()) {
         ),
     )
     var selectedItemIndex by rememberSaveable {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
 
     Scaffold (

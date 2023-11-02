@@ -10,6 +10,15 @@ import com.example.t9ahowtodie.ui.REROLL_SUCCESS
 import kotlin.math.min
 import kotlin.math.pow
 
+/* 1-dimensional argmin */
+fun <T : Comparable<T>> Iterable<T>.argmin(): Int {
+    return withIndex().minBy { it.value }.index
+}
+
+/* 1-dimensional argmax */
+fun <T : Comparable<T>> Iterable<T>.argmax(): Int {
+    return withIndex().maxBy { it.value }.index
+}
 
 /* Calculate the binomial
 * TODO replace with its DP solution */
@@ -22,6 +31,70 @@ fun binomialRecursive(n: Int, k: Int): Double {
     if (realk == 0 || n <= 1)
         return 1.0
     return binomialRecursive(n - 1, realk) + binomialRecursive(n - 1, realk - 1)
+}
+
+/* This function returns the number of ways we can obtain less than (or more than,
+* according to the moreThan param) a certain diceSum on a sum of nDice dice.
+* The size of the array max_exclude accounts for the number of minimized instances
+* The size of the array min_exclude accounts for the number of maximized instances */
+fun findWays_recursive (
+    nDice: Int,
+    diceSum: Int,
+    max_exclude: List<Int> = listOf<Int>(),  // Defaulting to normal roll
+    min_exclude: List<Int> = listOf<Int>(),  // Defaulting to normal roll
+    moreThan: Boolean = false) : Double {
+
+    if (nDice == 0) // We ran out of dice
+        return if (
+            (moreThan && (diceSum + max_exclude.sum() + min_exclude.sum() <= 0)) ||
+            (!moreThan && (diceSum + max_exclude.sum() + min_exclude.sum() >= 0))
+        )
+            1.0
+        else
+            0.0
+
+    var cnt : Double = 0.0
+    val max_exclude_copy = max_exclude.toMutableList()
+    val min_exclude_copy = min_exclude.toMutableList()
+
+    for (i in 1 .. D6) {
+        if (max_exclude.isNotEmpty() && i > max_exclude.min())
+            max_exclude_copy[max_exclude.argmin()] = i
+        if (min_exclude.isNotEmpty() && i < min_exclude.max())
+            min_exclude_copy[min_exclude.argmax()] = i
+
+        cnt += findWays_recursive(
+            nDice = nDice - 1,
+            diceSum = diceSum - i,
+            max_exclude = max_exclude_copy,
+            min_exclude = min_exclude_copy,
+            moreThan = moreThan
+        )
+    }
+    return cnt
+}
+
+
+
+
+/* Probability of rolling less (or more according to the moreThan param) than a certain threshold
+* on a sum of nDice dice.
+* we count in the instances of maximized or minimized, which default to 0 on a normal roll.
+* Recursive version ( O(n^6)) */
+fun calculateTestBaseProbability(
+    nDice: Int,
+    threshold: Int,
+    minimized: Int = 0,
+    maximized: Int = 0,
+    moreThan: Boolean = false) : Double {
+
+    return ( findWays_recursive(
+        nDice = nDice + maximized + minimized,
+        diceSum = threshold,
+        max_exclude = MutableList(minimized) { 1 },
+        min_exclude = MutableList(maximized) { D6 },
+        moreThan = moreThan
+    ) / D6.toDouble().pow(nDice + maximized + minimized) )
 }
 
 /* Probability that the sum of nDice Dice is equal to threshold */
