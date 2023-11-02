@@ -36,7 +36,8 @@ fun binomialRecursive(n: Int, k: Int): Double {
 /* This function returns the number of ways we can obtain less than (or more than,
 * according to the moreThan param) a certain diceSum on a sum of nDice dice.
 * The size of the array max_exclude accounts for the number of minimized instances
-* The size of the array min_exclude accounts for the number of maximized instances */
+* The size of the array min_exclude accounts for the number of maximized instances
+* Recursive version ( O(n^6)) */
 fun findWays_recursive (
     nDice: Int,
     diceSum: Int,
@@ -79,8 +80,7 @@ fun findWays_recursive (
 
 /* Probability of rolling less (or more according to the moreThan param) than a certain threshold
 * on a sum of nDice dice.
-* we count in the instances of maximized or minimized, which default to 0 on a normal roll.
-* Recursive version ( O(n^6)) */
+* we count in the instances of maximized or minimized, which default to 0 on a normal roll. */
 fun calculateTestBaseProbability(
     nDice: Int,
     threshold: Int,
@@ -98,6 +98,7 @@ fun calculateTestBaseProbability(
 }
 
 /* Probability that the sum of nDice Dice is equal to threshold */
+@Deprecated("This function finds no use")
 fun probabilitySumEqualsOnNDice(nDice: Int, threshold: Int): Double {
 
     Log.d("Debug", "Calling with $nDice and $threshold")
@@ -119,6 +120,7 @@ fun probabilitySumEqualsOnNDice(nDice: Int, threshold: Int): Double {
 }
 
 /* Probability that the sum of nDice Dice is less or equal to threshold */
+@Deprecated("Use calculateTestBaseProbability instead")
 fun probabilitySumLeqOnNDice(nDice: Int, threshold: Int): Double {
 
     Log.d("Debug", "Calling with $nDice and $threshold")
@@ -137,6 +139,7 @@ fun probabilitySumLeqOnNDice(nDice: Int, threshold: Int): Double {
 }
 
 /* Probability that the sum of nDice Dice is greater or equal to threshold */
+@Deprecated("Use calculateTestBaseProbability instead")
 fun probabilitySumGeqOnNDice(nDice: Int, threshold: Int): Double {
 
     /* Corner case */
