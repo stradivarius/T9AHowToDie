@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -21,21 +22,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.t9ahowtodie.BuildConfig
 import com.example.t9ahowtodie.R
+import com.example.t9ahowtodie.ui.components.TextComponent
 import com.example.t9ahowtodie.ui.theme.T9AHowToDieTheme
+
+
 
 @Composable
 fun SplashScreen(navHostController: NavHostController) {
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -75,12 +86,20 @@ fun SplashScreen(navHostController: NavHostController) {
             modifier = Modifier
                 .align(alignment = Alignment.TopCenter)
                 .offset(
-                    x = 0.dp,
                     y = 79.dp
                 )
-                .requiredWidth(width = 272.dp)
-                .requiredHeight(height = 100.dp))
+        )
+        /* Version Label */
+        TextComponent(
+            text = "version ${BuildConfig.VERSION_NAME}",
+            size = 10.sp,
+            modifier = Modifier
+                .align(alignment = Alignment.TopCenter)
+                .offset(
+                    y = 190.dp
+                ))
 
+        /* GET STARTED BUTTON */
         Button(
             onClick = { navHostController.navigate(Routes.ATTACKS_STATS) },
             colors = ButtonDefaults
@@ -108,6 +127,48 @@ fun SplashScreen(navHostController: NavHostController) {
                     .requiredWidth(width = 30.dp)
                     .requiredHeight(height = 30.dp))
         }
+
+
+        /* Footer */
+        val devName: String = "Stradivarius"
+        val annotatedFooter: AnnotatedString = buildAnnotatedString {
+            val footer: String = "Developed by $devName"
+            val linkStartIdx: Int = footer.indexOf(devName)
+            val linkEndIdx: Int = linkStartIdx + devName.length
+            append(footer)
+            addStyle(
+                style = SpanStyle(
+                    color = Color.White,
+                    textDecoration = TextDecoration.Underline
+                ), start = linkStartIdx, end = linkEndIdx
+            )
+            addStringAnnotation(
+                tag = "url",
+                annotation = "https://github.com/stradivarius/T9AHowToDie",
+                start = linkStartIdx,
+                end = linkEndIdx
+            )
+        }
+        val mUriHandler = LocalUriHandler.current
+        ClickableText(
+            text = annotatedFooter,
+            style = TextStyle(
+                fontSize = 12.sp),
+            modifier = Modifier
+                .align(alignment = Alignment.BottomCenter)
+                .offset(
+                    x = 0.dp,
+                    y = (-15).dp
+                )
+            ,
+            onClick = {
+                annotatedFooter
+                    .getStringAnnotations("url", it, it)
+                    .firstOrNull()?.let { stringAnnotation ->
+                        mUriHandler.openUri(stringAnnotation.item)
+                    }
+            }
+        )
     }
 }
 
