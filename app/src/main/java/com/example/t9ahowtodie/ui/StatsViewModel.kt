@@ -62,6 +62,7 @@ class StatsViewModel: ViewModel() {
     }
 
     /* Combined probability of one attack going through alle the steps */
+    @Deprecated("Old style!")
     private fun calculateAttackProbability(): Double {
         return (
                 calculateAttackBaseProbability(

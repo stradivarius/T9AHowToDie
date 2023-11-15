@@ -56,13 +56,14 @@ fun findWays_recursive (
             0.0
 
     var cnt : Double = 0.0
-    val max_exclude_copy = max_exclude.toMutableList()
-    val min_exclude_copy = min_exclude.toMutableList()
 
     for (i in 1 .. D6) {
-        if (max_exclude.isNotEmpty() && i > max_exclude.min())
+        val max_exclude_copy = max_exclude.toMutableList()
+        val min_exclude_copy = min_exclude.toMutableList()
+
+        if (max_exclude.isNotEmpty() && i > max_exclude.min()) // Minimized
             max_exclude_copy[max_exclude.argmin()] = i
-        if (min_exclude.isNotEmpty() && i < min_exclude.max())
+        if (min_exclude.isNotEmpty() && i < min_exclude.max()) // Maximized
             min_exclude_copy[min_exclude.argmax()] = i
 
         cnt += findWays_recursive(
