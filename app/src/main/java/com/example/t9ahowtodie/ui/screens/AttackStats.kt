@@ -30,6 +30,12 @@ import com.example.t9ahowtodie.ui.components.StatModifierToggleButton
 import com.example.t9ahowtodie.ui.components.TextComponent
 import com.example.t9ahowtodie.ui.components.TextFieldNumber
 import com.example.t9ahowtodie.ui.AttackStatModifiers
+import com.example.t9ahowtodie.ui.BATTLE_FOCUS
+import com.example.t9ahowtodie.ui.FORTITUDE
+import com.example.t9ahowtodie.ui.LETHAL
+import com.example.t9ahowtodie.ui.POISON
+import com.example.t9ahowtodie.ui.components.SmallRadioButton
+import com.example.t9ahowtodie.ui.components.StatRadioButton
 import com.example.t9ahowtodie.ui.theme.T9AHowToDieTheme
 
 @Composable
@@ -81,6 +87,12 @@ fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel)
             TextComponent(text = "To Hit", size = 20.sp,
                 modifier = Modifier.padding(horizontal = 10.dp))
             Spacer(modifier = Modifier.weight(1f))
+            SmallRadioButton(text = "P", checked = viewModel.attackStatsState.value.poisonAttacks) {
+                viewModel.onAttack(AttackStatsStateEvents.specialAttack(POISON))
+            }
+            SmallRadioButton(text = "B", checked = viewModel.attackStatsState.value.battleFocus) {
+                viewModel.onAttack(AttackStatsStateEvents.specialAttack(BATTLE_FOCUS))
+            }
             StatModifierToggleButton(
                 statuses = AttackStatModifiers,
                 currentStatus = viewModel.attackStatsState.value.toHitModifier) {
@@ -102,6 +114,9 @@ fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel)
             TextComponent(text = "To Wound", size = 20.sp,
                 modifier = Modifier.padding(horizontal = 10.dp))
             Spacer(modifier = Modifier.weight(1f))
+            SmallRadioButton(text = "L", checked = viewModel.attackStatsState.value.lethalStrike) {
+                viewModel.onAttack(AttackStatsStateEvents.specialAttack(LETHAL))
+            }
             StatModifierToggleButton(
                 statuses = AttackStatModifiers,
                 currentStatus = viewModel.attackStatsState.value.toWoundModifier) {
@@ -144,6 +159,9 @@ fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel)
             TextComponent(text = "Special Save", size = 20.sp,
                 modifier = Modifier.padding(horizontal = 10.dp))
             Spacer(modifier = Modifier.weight(1f))
+            SmallRadioButton(text = "F", checked = viewModel.attackStatsState.value.fortitude) {
+                viewModel.onAttack(AttackStatsStateEvents.specialAttack(FORTITUDE))
+            }
             StatModifierToggleButton(
                 statuses = AttackStatModifiers,
                 currentStatus = viewModel.attackStatsState.value.specialSaveModifier) {
@@ -153,28 +171,6 @@ fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel)
         SixRadioButtons(arrayListOf("2+", "3+", "4+", "5+", "6", "N/A"),
             checkedIndex = viewModel.attackStatsState.value.specialSaveIdx) {
             viewModel.onAttack(AttackStatsStateEvents.specialSaveChoice(it))
-        }
-
-        /* Probability */
-        Row (
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(all = 10.dp)
-        ) {
-            TextComponent(text = "Probability", size = 25.sp)
-            Spacer(Modifier.weight(1f))
-            TextComponent(
-                text = String.format("%.2f%%", viewModel.attackStatsState.value.probability * 100),
-                size = 25.sp,
-                modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.secondary,
-                        shape = CircleShape
-                    )
-                    .padding(10.dp)
-            )
         }
 
         /* Average Wounds */
@@ -188,6 +184,28 @@ fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel)
             Spacer(Modifier.weight(1f))
             TextComponent(
                 text = String.format("%.2f", viewModel.attackStatsState.value.averageAttacks),
+                size = 25.sp,
+                modifier = Modifier
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.secondary,
+                        shape = CircleShape
+                    )
+                    .padding(10.dp)
+            )
+        }
+
+        /* Probability */
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = 10.dp)
+        ) {
+            TextComponent(text = "Probability", size = 25.sp)
+            Spacer(Modifier.weight(1f))
+            TextComponent(
+                text = String.format("%.2f%%", viewModel.attackStatsState.value.probability * 100),
                 size = 25.sp,
                 modifier = Modifier
                     .border(

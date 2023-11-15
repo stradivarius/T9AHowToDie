@@ -39,6 +39,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -122,6 +123,9 @@ fun TextFieldNumber(
 fun StatRadioButton(
     text: String,
     checked: Boolean,
+    size: Dp = 50.dp,
+    textsize: TextUnit = 20.sp,
+    clickedColor: Color = MaterialTheme.colorScheme.secondary,
     callback: () -> Unit
 ) {
     Card (
@@ -129,7 +133,7 @@ fun StatRadioButton(
         modifier = Modifier
             .clickable { callback() }
             .padding(5.dp)
-            .size(50.dp)
+            .size(size)
             .border(
                 width = 1.dp,
                 shape = CircleShape,
@@ -142,7 +146,7 @@ fun StatRadioButton(
                 .fillMaxSize()
                 .background(
                     color = if (checked)
-                        MaterialTheme.colorScheme.secondary
+                        clickedColor
                     else
                         MaterialTheme.colorScheme.primary
                 ),
@@ -150,12 +154,29 @@ fun StatRadioButton(
         ) {
             TextComponent(
                 text = text,
-                size = 20.sp,
+                size = textsize,
                 color = if (checked)
                     MaterialTheme.colorScheme.primary
                 else
                     MaterialTheme.colorScheme.secondary)
         }
+    }
+}
+
+@Composable
+fun SmallRadioButton(
+    text: String,
+    checked: Boolean,
+    callback: () -> Unit
+) {
+    StatRadioButton(
+        text = text,
+        checked = checked,
+        size = 30.dp,
+        textsize = 20.sp,
+        clickedColor = MaterialTheme.colorScheme.tertiary
+    ) {
+        callback()
     }
 }
 

@@ -116,9 +116,7 @@ fun SplashScreen(navHostController: NavHostController) {
                 lineHeight = 1.9.em,
                 style = TextStyle(
                     fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold),
-                modifier = Modifier
-                    .requiredWidth(width = 171.dp))
+                    fontWeight = FontWeight.Bold))
             Spacer(modifier = Modifier.width(10.dp))
             Image(
                 painter = painterResource(id = R.drawable.rightarrow),

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.t9ahowtodie.calculateAttackBaseProbability
+import com.example.t9ahowtodie.calculateAverageInflictedWounds
 import com.example.t9ahowtodie.calculateTestBaseProbability
 import com.example.t9ahowtodie.calculateTestProbability
 import com.example.t9ahowtodie.chancesAttack
@@ -24,6 +25,11 @@ const val REROLL_FAILED = 1
 const val REROLL_SUCCESS = 2
 const val REROLL_ONES = 3
 const val REROLL_SIXES = 4
+
+const val POISON = 0
+const val LETHAL = 1
+const val BATTLE_FOCUS = 2
+const val FORTITUDE = 3
 
 /* Just a list of strings corresponding to the input value */
 fun generateMaxMinInstances(instances: Int): List<String> {
@@ -120,14 +126,48 @@ class StatsViewModel: ViewModel() {
                     attackStatsState.value.copy(specialSaveModifier =
                     (attackStatsState.value.specialSaveModifier + 1) % AttackStatModifiers.size )
             }
+            is AttackStatsStateEvents.specialAttack -> {
+                when ( event.specialAttack ) {
+                    POISON ->
+                        attackStatsState.value = attackStatsState.value.copy (
+                            poisonAttacks = !attackStatsState.value.poisonAttacks )
+                    LETHAL ->
+                        attackStatsState.value = attackStatsState.value.copy (
+                            lethalStrike = !attackStatsState.value.lethalStrike )
+                    BATTLE_FOCUS ->
+                        attackStatsState.value = attackStatsState.value.copy (
+                            battleFocus = !attackStatsState.value.battleFocus )
+                    FORTITUDE ->
+                        attackStatsState.value = attackStatsState.value.copy (
+                            fortitude = !attackStatsState.value.fortitude )
+                }
+            }
             else -> {
                 Log.v("onTest", "Event is null, screen has started.")
             }
         }
-        attackStatsState.value =
-            attackStatsState.value.copy(probability = calculateAttackProbability())
-        attackStatsState.value.averageAttacks =
-            attackStatsState.value.probability * attackStatsState.value.attacksNumber
+
+        attackStatsState.value = attackStatsState.value.copy(
+            averageAttacks = calculateAverageInflictedWounds(
+                numberAttacks = attackStatsState.value.attacksNumber,
+                rollToHit = attackStatsState.value.toHitIdx,
+                rollToWound = attackStatsState.value.toWoundIdx,
+                rollArmourSave = attackStatsState.value.armourSaveIdx,
+                rollSpecialSave = attackStatsState.value.specialSaveIdx,
+                modifierToHit = attackStatsState.value.toHitModifier,
+                modifierToWound = attackStatsState.value.toWoundModifier,
+                modifierArmourSave = attackStatsState.value.armourSaveModifier,
+                modifierSpecialSave = attackStatsState.value.specialSaveModifier,
+                poisonAttacks = attackStatsState.value.poisonAttacks,
+                lethalStrike = attackStatsState.value.lethalStrike,
+                battleFocus = attackStatsState.value.battleFocus,
+                fortitude = attackStatsState.value.fortitude
+            )
+        )
+        attackStatsState.value.probability = // Probability for one attack to go through
+            attackStatsState.value.averageAttacks / attackStatsState.value.attacksNumber
+//        attackStatsState.value.averageAttacks =
+//            attackStatsState.value.probability * attackStatsState.value.attacksNumber
     }
 
 
@@ -224,6 +264,10 @@ data class AttackStatsState(
     var toWoundModifier: Int = 0,
     var armourSaveModifier: Int = 0,
     var specialSaveModifier: Int = 0,
+    var poisonAttacks : Boolean = false,
+    var lethalStrike : Boolean = false,
+    var battleFocus : Boolean = false,
+    var fortitude : Boolean = false,
     var probability: Double = 1.0,
     var averageAttacks: Double = 1.0
 )
@@ -252,6 +296,7 @@ sealed class AttackStatsStateEvents {
     data class toWoundModify(val modifier: Int = 1) : AttackStatsStateEvents()
     data class armourSaveModify(val modifier: Int = 1) : AttackStatsStateEvents()
     data class specialSaveModify(val modifier: Int = 1) : AttackStatsStateEvents()
+    data class specialAttack(val specialAttack: Int) : AttackStatsStateEvents()
 }
 
 /* Different events occurring in the test screen */

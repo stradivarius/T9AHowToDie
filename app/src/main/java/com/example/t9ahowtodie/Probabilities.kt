@@ -150,14 +150,18 @@ fun probabilitySumGeqOnNDice(nDice: Int, threshold: Int): Double {
     return ( 1 - probabilitySumLeqOnNDice(nDice, threshold - 1) )
 }
 
+/* What are the chances of success in an attack based on the id of the selection */
 fun chancesAttack(idx : Int) : Double {
     return ((D6 - idx).toDouble())
 }
 
+/* What are the chances of success in a save based on the id of the selection */
 fun chancesSave(idx : Int) : Double {
     return ((D6 - idx - 1).toDouble())
 }
 
+/* Calculate the base chances of an attack to be successful */
+@Deprecated("use calculate calculateAttackBaseProbabilitySixes")
 fun calculateAttackBaseProbability(chances : Double, modifier : Int = 0) : Double {
     return when (modifier) {
         NORMAL -> {
@@ -182,6 +186,118 @@ fun calculateAttackBaseProbability(chances : Double, modifier : Int = 0) : Doubl
     }
 }
 
+/* Calculate the chances of an attack to be successful:
+* This function returns a couple:
+*   - the successful chances of obtaining a SIX
+*   - the successful chances of success excluding SIXes
+* The successful number of chances are the sum of the two members of the couple. */
+fun calculateAttackBaseProbabilitySixes(chances : Double, modifier : Int = NORMAL) : Chance {
+
+    var chanceSixes : Double = 0.0
+    var chanceTot : Double = 1.0
+
+    // if it is automatic, then we just return 1 with no chance of obtaining sixes
+    if (chances.toInt() != D6)
+        when (modifier) {
+            NORMAL -> {
+                chanceSixes = 1.0 / D6
+                chanceTot = (chances / D6)
+            }
+            REROLL_FAILED -> {
+                chanceSixes = ( (1.0 / D6) + ( (1.0 - (chances / D6)) * (1 / D6) ) )
+                chanceTot = ( (chances / D6) + ( (1.0 - (chances / D6)) * (chances / D6) ) )
+            }
+            REROLL_SUCCESS -> {
+                chanceSixes = ( (chances / D6) * (1.0 / D6) )
+                chanceTot = ( (chances / D6).pow(2) )
+            }
+            REROLL_ONES -> {
+                chanceSixes = (1.0 / D6) + ( ( 1.0 / D6).pow(2) )
+                chanceTot = max(min(
+                (chances / D6) + ( ( 1.0 / D6) * (chances / D6) ),
+                1.0 ), 0.0)
+            }
+            REROLL_SIXES -> {
+                chanceSixes = ( (1.0 / D6).pow(2) )
+                chanceTot = max(min(
+                ( (chances - 1.0) / D6) + ( ( 1.0 / D6) * (chances / D6) ),
+                1.0 ), 0.0)
+            }
+            else -> {
+                Log.wtf("Probability", "This should never happen!")
+            }
+        }
+    return Chance(chanceTot - chanceSixes, chanceSixes)
+}
+
+/* Calculate the number of average inflicted wounds based on the number of attacks */
+fun calculateAverageInflictedWounds(
+    numberAttacks : Int,
+    rollToHit : Int,
+    rollToWound : Int,
+    rollArmourSave : Int,
+    rollSpecialSave : Int,
+    modifierToHit : Int = NORMAL,
+    modifierToWound : Int = NORMAL,
+    modifierArmourSave : Int = NORMAL,
+    modifierSpecialSave : Int = NORMAL,
+    poisonAttacks : Boolean = false,
+    lethalStrike : Boolean = false,
+    fortitude : Boolean = false,
+    battleFocus : Boolean = false
+) : Double {
+    /* Convert rolls to chances */
+    val chancesToHit : Double = chancesAttack(rollToHit)
+    val chancesToWound : Double = chancesAttack(rollToWound)
+    val chancesArmourSave : Double = chancesSave(rollArmourSave)
+    val chancesSpecialSave : Double = chancesSave(rollSpecialSave)
+
+    /* Hit
+    * split between hitNormal and HitPoison */
+    val hitChance = calculateAttackBaseProbabilitySixes(chancesToHit, modifierToHit)
+    var hitNormal = 0.0
+    var hitPoison = 0.0
+    if ( poisonAttacks ) {
+        hitNormal += numberAttacks *
+                hitChance.nosixes
+        hitPoison += numberAttacks *
+                ( if (battleFocus) (2 * hitChance.sixes) else hitChance.sixes )
+    } else {
+        hitNormal += numberAttacks *
+                (hitChance.nosixes + ( if (battleFocus) (2 * hitChance.sixes) else hitChance.sixes))
+    }
+
+    /* Wound
+    * split between woundNormal and woundLethal */
+    val woundChance = calculateAttackBaseProbabilitySixes(chancesToWound, modifierToWound)
+    var woundNormal = 0.0
+    var woundLethal = 0.0
+    if ( lethalStrike ) {
+        woundNormal += hitNormal *
+                woundChance.nosixes
+        woundLethal += hitNormal *
+                woundChance.sixes
+    } else {
+        woundNormal += hitNormal *
+                (woundChance.nosixes + woundChance.sixes)
+    }
+
+    /* Armour save
+    *  output is throughArmor and woundLethal */
+    val _armourChance = calculateAttackBaseProbabilitySixes(chancesArmourSave, modifierArmourSave)
+    val armourFailChance = 1.0 - ( _armourChance.sixes + _armourChance.nosixes )
+    val throughArmor = (woundNormal * armourFailChance) + (hitPoison * armourFailChance)
+
+    /* Special save
+    * output is finalWounds */
+    val _specialChance = calculateAttackBaseProbabilitySixes(chancesSpecialSave, modifierSpecialSave)
+    val specialFailChance = 1.0 - ( _specialChance.sixes + _specialChance.nosixes )
+    val finalWounds = if ( fortitude ) woundLethal + ( throughArmor * specialFailChance )
+        else ( ( throughArmor + woundLethal ) * specialFailChance )
+
+    return finalWounds
+}
+
 fun calculateTestProbability(baseProbability: Double, modifier: Int): Double {
 
     return when (modifier) {
@@ -199,5 +315,6 @@ fun calculateTestProbability(baseProbability: Double, modifier: Int): Double {
             0.0
         }
     }
-
 }
+
+data class Chance(val nosixes: Double, val sixes: Double)
