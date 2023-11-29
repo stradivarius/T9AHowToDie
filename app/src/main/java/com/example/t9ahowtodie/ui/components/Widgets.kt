@@ -261,6 +261,50 @@ fun StatModifierToggleButton(
 
 }
 
+@Composable
+fun OnOffToggleButton(
+    text: String,
+    checked: Boolean,
+    callback: () -> Unit
+) {
+    Card (
+        shape = CircleShape,
+        modifier = Modifier
+            .clickable {
+                callback()
+            }
+            .height(30.dp)
+            .width(160.dp)
+            .border(
+                width = 1.dp,
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.secondary
+            ),
+        elevation = CardDefaults.cardElevation(4.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    color = if (!checked)
+                        MaterialTheme.colorScheme.primary
+                    else
+                        MaterialTheme.colorScheme.secondary
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            TextComponent(
+                text = text,
+                size = 20.sp,
+                color = if (!checked)
+                    MaterialTheme.colorScheme.secondary
+                else
+                    MaterialTheme.colorScheme.primary)
+        }
+    }
+
+}
+
 
 @Preview
 @Composable

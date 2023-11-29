@@ -37,14 +37,14 @@ fun generateMaxMinInstances(instances: Int): List<String> {
 }
 
 val AttackStatModifiers = arrayListOf<String>(
-    "Normal",
+    "No Reroll",
     "Reroll Failed",
     "Reroll Success",
     "Reroll Ones",
     "Reroll Sixes"
 )
 val TestStatModifiers = arrayListOf<String>(
-    "Normal",
+    "No Reroll",
     "Reroll Failed",
     "Reroll Success"
 )
@@ -58,10 +58,10 @@ class StatsViewModel: ViewModel() {
 
     /* How many different values can I obtain by summing the result of diceNumber dice? */
     fun numberOfValuesWithDice(diceNumber: Int): List<String> {
-        return Array(D6 * diceNumber - diceNumber + 1){it + diceNumber}.map { it.toString() }
+        return Array(D6 * diceNumber - diceNumber + 1){it + diceNumber}.map{ it.toString() }
     }
 
-    /* Combined probability of one attack going through alle the steps */
+    /* Combined probability of one attack going through all the steps */
     @Deprecated("Old style!")
     private fun calculateAttackProbability(): Double {
         return (

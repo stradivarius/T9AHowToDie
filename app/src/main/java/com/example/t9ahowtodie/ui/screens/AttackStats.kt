@@ -2,12 +2,14 @@ package com.example.t9ahowtodie.ui.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -16,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,6 +37,7 @@ import com.example.t9ahowtodie.ui.BATTLE_FOCUS
 import com.example.t9ahowtodie.ui.FORTITUDE
 import com.example.t9ahowtodie.ui.LETHAL
 import com.example.t9ahowtodie.ui.POISON
+import com.example.t9ahowtodie.ui.components.OnOffToggleButton
 import com.example.t9ahowtodie.ui.components.SmallRadioButton
 import com.example.t9ahowtodie.ui.components.StatRadioButton
 import com.example.t9ahowtodie.ui.theme.T9AHowToDieTheme
@@ -45,6 +49,8 @@ fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel)
     BackHandler {
         // do nothing
     }
+
+
 
     /* Fake LifeCycle Listener for Composables */
     DisposableEffect(
@@ -71,7 +77,9 @@ fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel)
             TextFieldNumber ( // Call the result update whenever changing the number of attacks
                 maxDigits = MAX_ATTACKS_DIGITS,
                 textChangedCallback = {
-                viewModel.onAttack(AttackStatsStateEvents.attacksNumberEntered(Integer.parseInt(it)))
+                viewModel.onAttack(
+                    AttackStatsStateEvents.attacksNumberEntered(Integer.parseInt(it))
+                )
             })
         }
 
@@ -87,16 +95,33 @@ fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel)
             TextComponent(text = "To Hit", size = 20.sp,
                 modifier = Modifier.padding(horizontal = 10.dp))
             Spacer(modifier = Modifier.weight(1f))
-            SmallRadioButton(text = "P", checked = viewModel.attackStatsState.value.poisonAttacks) {
-                viewModel.onAttack(AttackStatsStateEvents.specialAttack(POISON))
-            }
-            SmallRadioButton(text = "B", checked = viewModel.attackStatsState.value.battleFocus) {
-                viewModel.onAttack(AttackStatsStateEvents.specialAttack(BATTLE_FOCUS))
-            }
+//            SmallRadioButton(text = "P", checked = viewModel.attackStatsState.value.poisonAttacks) {
+//                viewModel.onAttack(AttackStatsStateEvents.specialAttack(POISON))
+//            }
+//            SmallRadioButton(text = "B", checked = viewModel.attackStatsState.value.battleFocus) {
+//                viewModel.onAttack(AttackStatsStateEvents.specialAttack(BATTLE_FOCUS))
+//            }
             StatModifierToggleButton(
                 statuses = AttackStatModifiers,
                 currentStatus = viewModel.attackStatsState.value.toHitModifier) {
                 viewModel.onAttack(AttackStatsStateEvents.toHitModify())
+            }
+        }
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 5.dp)
+        ){
+            Spacer(modifier = Modifier.weight(1f))
+            OnOffToggleButton(text = "Poison",
+                checked = viewModel.attackStatsState.value.poisonAttacks) {
+                viewModel.onAttack(AttackStatsStateEvents.specialAttack(POISON))
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+            OnOffToggleButton(text = "Battle Focus",
+                checked = viewModel.attackStatsState.value.battleFocus) {
+                viewModel.onAttack(AttackStatsStateEvents.specialAttack(BATTLE_FOCUS))
             }
         }
         SixRadioButtons(arrayListOf("A", "2+", "3+", "4+", "5+", "6"),
@@ -114,19 +139,32 @@ fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel)
             TextComponent(text = "To Wound", size = 20.sp,
                 modifier = Modifier.padding(horizontal = 10.dp))
             Spacer(modifier = Modifier.weight(1f))
-            SmallRadioButton(text = "L", checked = viewModel.attackStatsState.value.lethalStrike) {
-                viewModel.onAttack(AttackStatsStateEvents.specialAttack(LETHAL))
-            }
+//            SmallRadioButton(text = "L", checked = viewModel.attackStatsState.value.lethalStrike) {
+//                viewModel.onAttack(AttackStatsStateEvents.specialAttack(LETHAL))
+//            }
             StatModifierToggleButton(
                 statuses = AttackStatModifiers,
                 currentStatus = viewModel.attackStatsState.value.toWoundModifier) {
                 viewModel.onAttack(AttackStatsStateEvents.toWoundModify())
             }
         }
-        SixRadioButtons(arrayListOf("A", "2+", "3+", "4+", "5+", "6"),
-            checkedIndex = viewModel.attackStatsState.value.toWoundIdx) {
-            viewModel.onAttack(AttackStatsStateEvents.toWoundChoice(it))
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 5.dp)
+        ){
+            Spacer(modifier = Modifier.weight(1f))
+            OnOffToggleButton(text = "Lethal",
+                checked = viewModel.attackStatsState.value.lethalStrike) {
+                viewModel.onAttack(AttackStatsStateEvents.specialAttack(LETHAL))
+            }
         }
+        SixRadioButtons(arrayListOf("A", "2+", "3+", "4+", "5+", "6"),
+            checkedIndex = viewModel.attackStatsState.value.toHitIdx) {
+            viewModel.onAttack(AttackStatsStateEvents.toHitChoice(it))
+        }
+
 
         /* Armour Save */
         Row (
@@ -159,13 +197,25 @@ fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel)
             TextComponent(text = "Special Save", size = 20.sp,
                 modifier = Modifier.padding(horizontal = 10.dp))
             Spacer(modifier = Modifier.weight(1f))
-            SmallRadioButton(text = "F", checked = viewModel.attackStatsState.value.fortitude) {
-                viewModel.onAttack(AttackStatsStateEvents.specialAttack(FORTITUDE))
-            }
+//            SmallRadioButton(text = "F", checked = viewModel.attackStatsState.value.fortitude) {
+//                viewModel.onAttack(AttackStatsStateEvents.specialAttack(FORTITUDE))
+//            }
             StatModifierToggleButton(
                 statuses = AttackStatModifiers,
                 currentStatus = viewModel.attackStatsState.value.specialSaveModifier) {
                 viewModel.onAttack(AttackStatsStateEvents.specialSaveModify())
+            }
+        }
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 5.dp)
+        ){
+            Spacer(modifier = Modifier.weight(1f))
+            OnOffToggleButton(text = "Fortitude",
+                checked = viewModel.attackStatsState.value.fortitude) {
+                viewModel.onAttack(AttackStatsStateEvents.specialAttack(FORTITUDE))
             }
         }
         SixRadioButtons(arrayListOf("2+", "3+", "4+", "5+", "6", "N/A"),
