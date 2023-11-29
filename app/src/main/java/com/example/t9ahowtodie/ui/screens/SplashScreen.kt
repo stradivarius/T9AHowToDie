@@ -3,10 +3,12 @@ package com.example.t9ahowtodie.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
@@ -60,44 +62,88 @@ fun SplashScreen(navHostController: NavHostController) {
                 .align(alignment = Alignment.BottomStart)
                 .fillMaxWidth())
 
-        /* Labels */
-        Text(
-            text = "Welcome to",
-            color = Color.White,
-            textAlign = TextAlign.Center,
-            style = TextStyle(
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold),
-            modifier = Modifier
-                .align(alignment = Alignment.TopCenter)
-                .offset(
-                    x = 0.dp,
-                    y = 28.dp
+        Column (
+            modifier = Modifier.fillMaxSize()
+        ) {
+            /* Labels */
+            Text(
+                text = "Welcome to",
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                style = TextStyle(
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 30.dp))
+
+            Text(
+                text = "T9A \nHow to DIE!",
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                style = TextStyle(
+                    fontSize = 40.sp,
+                    fontWeight = FontWeight.Bold),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 30.dp)
+            )
+
+            /* Version Label */
+            Text(
+                text = "version ${BuildConfig.VERSION_NAME}",
+                style = TextStyle(
+                    fontSize = 10.sp),
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth())
+
+            /* Footer */
+            Spacer(Modifier.weight(1f))
+            val devName: String = "Stradivarius"
+            val annotatedFooter: AnnotatedString = buildAnnotatedString {
+                val footer: String = "Developed by $devName"
+                val linkStartIdx: Int = footer.indexOf(devName)
+                val linkEndIdx: Int = linkStartIdx + devName.length
+                append(footer)
+                addStyle(
+                    style = SpanStyle(
+                        color = Color.White,
+                        textDecoration = TextDecoration.Underline
+                    ), start = linkStartIdx, end = linkEndIdx
                 )
-                .requiredWidth(width = 272.dp)
-                .requiredHeight(height = 76.dp))
-        Text(
-            text = "T9A \nHow to DIE!",
-            color = Color.White,
-            textAlign = TextAlign.Center,
-            style = TextStyle(
-                fontSize = 40.sp,
-                fontWeight = FontWeight.Bold),
-            modifier = Modifier
-                .align(alignment = Alignment.TopCenter)
-                .offset(
-                    y = 79.dp
+                addStringAnnotation(
+                    tag = "url",
+                    annotation = "https://github.com/stradivarius/T9AHowToDie",
+                    start = linkStartIdx,
+                    end = linkEndIdx
                 )
-        )
-        /* Version Label */
-        TextComponent(
-            text = "version ${BuildConfig.VERSION_NAME}",
-            size = 10.sp,
-            modifier = Modifier
-                .align(alignment = Alignment.TopCenter)
-                .offset(
-                    y = 190.dp
-                ))
+            }
+            val mUriHandler = LocalUriHandler.current
+            ClickableText(
+                text = annotatedFooter,
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp)
+                ,
+                onClick = {
+                    annotatedFooter
+                        .getStringAnnotations("url", it, it)
+                        .firstOrNull()?.let { stringAnnotation ->
+                            mUriHandler.openUri(stringAnnotation.item)
+                        }
+                }
+            )
+        }
+
+
+
+
+
 
         /* GET STARTED BUTTON */
         Button(
@@ -125,48 +171,6 @@ fun SplashScreen(navHostController: NavHostController) {
                     .requiredWidth(width = 30.dp)
                     .requiredHeight(height = 30.dp))
         }
-
-
-        /* Footer */
-        val devName: String = "Stradivarius"
-        val annotatedFooter: AnnotatedString = buildAnnotatedString {
-            val footer: String = "Developed by $devName"
-            val linkStartIdx: Int = footer.indexOf(devName)
-            val linkEndIdx: Int = linkStartIdx + devName.length
-            append(footer)
-            addStyle(
-                style = SpanStyle(
-                    color = Color.White,
-                    textDecoration = TextDecoration.Underline
-                ), start = linkStartIdx, end = linkEndIdx
-            )
-            addStringAnnotation(
-                tag = "url",
-                annotation = "https://github.com/stradivarius/T9AHowToDie",
-                start = linkStartIdx,
-                end = linkEndIdx
-            )
-        }
-        val mUriHandler = LocalUriHandler.current
-        ClickableText(
-            text = annotatedFooter,
-            style = TextStyle(
-                fontSize = 12.sp),
-            modifier = Modifier
-                .align(alignment = Alignment.BottomCenter)
-                .offset(
-                    x = 0.dp,
-                    y = (-15).dp
-                )
-            ,
-            onClick = {
-                annotatedFooter
-                    .getStringAnnotations("url", it, it)
-                    .firstOrNull()?.let { stringAnnotation ->
-                        mUriHandler.openUri(stringAnnotation.item)
-                    }
-            }
-        )
     }
 }
 
