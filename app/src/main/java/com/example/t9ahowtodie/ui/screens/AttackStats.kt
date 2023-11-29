@@ -161,8 +161,8 @@ fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel)
             }
         }
         SixRadioButtons(arrayListOf("A", "2+", "3+", "4+", "5+", "6"),
-            checkedIndex = viewModel.attackStatsState.value.toHitIdx) {
-            viewModel.onAttack(AttackStatsStateEvents.toHitChoice(it))
+            checkedIndex = viewModel.attackStatsState.value.toWoundIdx) {
+            viewModel.onAttack(AttackStatsStateEvents.toWoundChoice(it))
         }
 
 

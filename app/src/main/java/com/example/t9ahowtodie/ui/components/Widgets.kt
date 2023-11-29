@@ -232,7 +232,7 @@ fun StatModifierToggleButton(
                 callback()
             }
             .wrapContentHeight()
-            .width(160.dp)
+            .width(180.dp)
             .border(
                 width = 1.dp,
                 shape = CircleShape,
@@ -276,7 +276,7 @@ fun OnOffToggleButton(
                 callback()
             }
             .wrapContentHeight()
-            .width(160.dp)
+            .width(180.dp)
             .border(
                 width = 1.dp,
                 shape = CircleShape,
