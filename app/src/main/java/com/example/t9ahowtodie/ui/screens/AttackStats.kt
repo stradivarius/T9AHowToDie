@@ -246,26 +246,26 @@ fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel)
         }
 
         /* Probability */
-        Row (
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(all = 10.dp)
-        ) {
-            TextComponent(text = "Probability", size = 25.sp)
-            Spacer(Modifier.weight(1f))
-            TextComponent(
-                text = String.format("%.2f%%", viewModel.attackStatsState.value.probability * 100),
-                size = 25.sp,
-                modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.secondary,
-                        shape = CircleShape
-                    )
-                    .padding(10.dp)
-            )
-        }
+//        Row (
+//            verticalAlignment = Alignment.CenterVertically,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(all = 10.dp)
+//        ) {
+//            TextComponent(text = "Probability", size = 25.sp)
+//            Spacer(Modifier.weight(1f))
+//            TextComponent(
+//                text = String.format("%.2f%%", viewModel.attackStatsState.value.probability * 100),
+//                size = 25.sp,
+//                modifier = Modifier
+//                    .border(
+//                        width = 1.dp,
+//                        color = MaterialTheme.colorScheme.secondary,
+//                        shape = CircleShape
+//                    )
+//                    .padding(10.dp)
+//            )
+//        }
     }
 }
 
