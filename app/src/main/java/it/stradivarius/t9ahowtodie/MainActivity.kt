@@ -1,4 +1,4 @@
-package com.example.t9ahowtodie
+package it.stradivarius.t9ahowtodie
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -35,14 +35,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.t9ahowtodie.ui.StatsViewModel
-import com.example.t9ahowtodie.ui.components.BottomNavigationItem
-import com.example.t9ahowtodie.ui.components.NavigationTextComponent
-import com.example.t9ahowtodie.ui.screens.AttackStats
-import com.example.t9ahowtodie.ui.screens.Routes
-import com.example.t9ahowtodie.ui.screens.SplashScreen
-import com.example.t9ahowtodie.ui.screens.TestStats
-import com.example.t9ahowtodie.ui.theme.T9AHowToDieTheme
+import it.stradivarius.t9ahowtodie.ui.StatsViewModel
+import it.stradivarius.t9ahowtodie.ui.components.BottomNavigationItem
+import it.stradivarius.t9ahowtodie.ui.components.NavigationTextComponent
+import it.stradivarius.t9ahowtodie.ui.screens.AttackStats
+import it.stradivarius.t9ahowtodie.ui.screens.Routes
+import it.stradivarius.t9ahowtodie.ui.screens.SplashScreen
+import it.stradivarius.t9ahowtodie.ui.screens.TestStats
+import it.stradivarius.t9ahowtodie.ui.theme.T9AHowToDieTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

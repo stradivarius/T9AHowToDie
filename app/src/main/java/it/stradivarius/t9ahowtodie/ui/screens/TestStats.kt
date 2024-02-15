@@ -1,4 +1,4 @@
-package com.example.t9ahowtodie.ui.screens
+package it.stradivarius.t9ahowtodie.ui.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
@@ -21,18 +21,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.t9ahowtodie.ui.MinMaxModifier
-import com.example.t9ahowtodie.ui.StatsViewModel
-import com.example.t9ahowtodie.ui.TEST_SUM_EQUALS
-import com.example.t9ahowtodie.ui.TestStatModifiers
-import com.example.t9ahowtodie.ui.TestStatsStateEvents
-import com.example.t9ahowtodie.ui.components.BackgroundImg
-import com.example.t9ahowtodie.ui.components.MAX_TEST_DIGITS
-import com.example.t9ahowtodie.ui.components.RadioGrid
-import com.example.t9ahowtodie.ui.components.StatModifierToggleButton
-import com.example.t9ahowtodie.ui.components.TextComponent
-import com.example.t9ahowtodie.ui.components.TextFieldNumber
-import com.example.t9ahowtodie.ui.theme.T9AHowToDieTheme
+import it.stradivarius.t9ahowtodie.ui.MinMaxModifier
+import it.stradivarius.t9ahowtodie.ui.StatsViewModel
+import it.stradivarius.t9ahowtodie.ui.TEST_SUM_EQUALS
+import it.stradivarius.t9ahowtodie.ui.TestStatModifiers
+import it.stradivarius.t9ahowtodie.ui.TestStatsStateEvents
+import it.stradivarius.t9ahowtodie.ui.components.BackgroundImg
+import it.stradivarius.t9ahowtodie.ui.components.MAX_TEST_DIGITS
+import it.stradivarius.t9ahowtodie.ui.components.RadioGrid
+import it.stradivarius.t9ahowtodie.ui.components.StatModifierToggleButton
+import it.stradivarius.t9ahowtodie.ui.components.TextComponent
+import it.stradivarius.t9ahowtodie.ui.components.TextFieldNumber
+import it.stradivarius.t9ahowtodie.ui.theme.T9AHowToDieTheme
 
 @Composable
 fun TestStats(navHostController: NavHostController, viewModel: StatsViewModel) {
@@ -54,7 +54,7 @@ fun TestStats(navHostController: NavHostController, viewModel: StatsViewModel) {
         .fillMaxSize()
         .verticalScroll(rememberScrollState())) {
 
-        /* Number of Attacks */
+        /* Number of Dice */
         Row (
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -65,8 +65,8 @@ fun TestStats(navHostController: NavHostController, viewModel: StatsViewModel) {
             Spacer(modifier = Modifier.weight(1f))
             TextFieldNumber ( // Call the result update whenever changing the number of dice
                 maxDigits = MAX_TEST_DIGITS,
-                maxVal = 7,
-                textChangedCallback = {7
+                maxVal = 5,
+                textChangedCallback = {
                 viewModel.onTest(TestStatsStateEvents.diceNumberEntered(Integer.parseInt(it)))
             })
         }

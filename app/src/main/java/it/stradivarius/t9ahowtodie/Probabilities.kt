@@ -1,12 +1,12 @@
-package com.example.t9ahowtodie
+package it.stradivarius.t9ahowtodie
 
 import android.util.Log
-import com.example.t9ahowtodie.ui.D6
-import com.example.t9ahowtodie.ui.NORMAL
-import com.example.t9ahowtodie.ui.REROLL_FAILED
-import com.example.t9ahowtodie.ui.REROLL_ONES
-import com.example.t9ahowtodie.ui.REROLL_SIXES
-import com.example.t9ahowtodie.ui.REROLL_SUCCESS
+import it.stradivarius.t9ahowtodie.ui.D6
+import it.stradivarius.t9ahowtodie.ui.NORMAL
+import it.stradivarius.t9ahowtodie.ui.REROLL_FAILED
+import it.stradivarius.t9ahowtodie.ui.REROLL_ONES
+import it.stradivarius.t9ahowtodie.ui.REROLL_SIXES
+import it.stradivarius.t9ahowtodie.ui.REROLL_SUCCESS
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow

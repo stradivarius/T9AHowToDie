@@ -1,4 +1,4 @@
-package com.example.t9ahowtodie.ui.screens
+package it.stradivarius.t9ahowtodie.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,10 +39,9 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.t9ahowtodie.BuildConfig
-import com.example.t9ahowtodie.R
-import com.example.t9ahowtodie.ui.components.TextComponent
-import com.example.t9ahowtodie.ui.theme.T9AHowToDieTheme
+import it.stradivarius.t9ahowtodie.BuildConfig
+import it.stradivarius.t9ahowtodie.R
+import it.stradivarius.t9ahowtodie.ui.theme.T9AHowToDieTheme
 
 
 

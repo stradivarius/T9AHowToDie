@@ -1,4 +1,4 @@
-package com.example.t9ahowtodie.ui.components
+package it.stradivarius.t9ahowtodie.ui.components
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

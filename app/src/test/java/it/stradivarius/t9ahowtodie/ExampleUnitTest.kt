@@ -1,4 +1,4 @@
-package com.example.t9ahowtodie
+package it.stradivarius.t9ahowtodie
 
 import org.junit.Test
 

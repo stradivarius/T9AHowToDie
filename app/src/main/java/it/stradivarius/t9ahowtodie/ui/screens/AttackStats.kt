@@ -1,8 +1,7 @@
-package com.example.t9ahowtodie.ui.screens
+package it.stradivarius.t9ahowtodie.ui.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,29 +17,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.t9ahowtodie.ui.AttackStatsStateEvents
-import com.example.t9ahowtodie.ui.StatsViewModel
-import com.example.t9ahowtodie.ui.components.BackgroundImg
-import com.example.t9ahowtodie.ui.components.MAX_ATTACKS_DIGITS
-import com.example.t9ahowtodie.ui.components.SixRadioButtons
-import com.example.t9ahowtodie.ui.components.StatModifierToggleButton
-import com.example.t9ahowtodie.ui.components.TextComponent
-import com.example.t9ahowtodie.ui.components.TextFieldNumber
-import com.example.t9ahowtodie.ui.AttackStatModifiers
-import com.example.t9ahowtodie.ui.BATTLE_FOCUS
-import com.example.t9ahowtodie.ui.FORTITUDE
-import com.example.t9ahowtodie.ui.LETHAL
-import com.example.t9ahowtodie.ui.POISON
-import com.example.t9ahowtodie.ui.components.OnOffToggleButton
-import com.example.t9ahowtodie.ui.components.SmallRadioButton
-import com.example.t9ahowtodie.ui.components.StatRadioButton
-import com.example.t9ahowtodie.ui.theme.T9AHowToDieTheme
+import it.stradivarius.t9ahowtodie.ui.AttackStatsStateEvents
+import it.stradivarius.t9ahowtodie.ui.StatsViewModel
+import it.stradivarius.t9ahowtodie.ui.components.BackgroundImg
+import it.stradivarius.t9ahowtodie.ui.components.MAX_ATTACKS_DIGITS
+import it.stradivarius.t9ahowtodie.ui.components.SixRadioButtons
+import it.stradivarius.t9ahowtodie.ui.components.StatModifierToggleButton
+import it.stradivarius.t9ahowtodie.ui.components.TextComponent
+import it.stradivarius.t9ahowtodie.ui.components.TextFieldNumber
+import it.stradivarius.t9ahowtodie.ui.AttackStatModifiers
+import it.stradivarius.t9ahowtodie.ui.BATTLE_FOCUS
+import it.stradivarius.t9ahowtodie.ui.FORTITUDE
+import it.stradivarius.t9ahowtodie.ui.LETHAL
+import it.stradivarius.t9ahowtodie.ui.POISON
+import it.stradivarius.t9ahowtodie.ui.components.OnOffToggleButton
+import it.stradivarius.t9ahowtodie.ui.theme.T9AHowToDieTheme
 
 @Composable
 fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel) {

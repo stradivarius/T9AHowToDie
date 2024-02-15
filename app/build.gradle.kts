@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.t9ahowtodie"
+    namespace = "it.stradivarius.t9ahowtodie"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.t9ahowtodie"
+        applicationId = "it.stradivarius.t9ahowtodie"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
-        versionName = "0.95 Beta"
+        versionName = "0.96 Beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

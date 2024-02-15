@@ -1,4 +1,4 @@
-package com.example.t9ahowtodie.ui.screens
+package it.stradivarius.t9ahowtodie.ui.screens
 
 object Routes {
     const val SPLASH_SCREEN = "Splash Screen"

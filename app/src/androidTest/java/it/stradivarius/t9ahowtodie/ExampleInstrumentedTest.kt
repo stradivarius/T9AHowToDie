@@ -1,4 +1,4 @@
-package com.example.t9ahowtodie
+package it.stradivarius.t9ahowtodie
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

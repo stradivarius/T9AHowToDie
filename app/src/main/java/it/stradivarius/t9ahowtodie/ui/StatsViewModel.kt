@@ -1,18 +1,15 @@
-package com.example.t9ahowtodie.ui
+package it.stradivarius.t9ahowtodie.ui
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.t9ahowtodie.calculateAttackBaseProbability
-import com.example.t9ahowtodie.calculateAverageInflictedWounds
-import com.example.t9ahowtodie.calculateTestBaseProbability
-import com.example.t9ahowtodie.calculateTestProbability
-import com.example.t9ahowtodie.chancesAttack
-import com.example.t9ahowtodie.chancesSave
-import com.example.t9ahowtodie.probabilitySumEqualsOnNDice
-import com.example.t9ahowtodie.probabilitySumGeqOnNDice
-import com.example.t9ahowtodie.probabilitySumLeqOnNDice
+import it.stradivarius.t9ahowtodie.calculateAttackBaseProbability
+import it.stradivarius.t9ahowtodie.calculateAverageInflictedWounds
+import it.stradivarius.t9ahowtodie.calculateTestBaseProbability
+import it.stradivarius.t9ahowtodie.calculateTestProbability
+import it.stradivarius.t9ahowtodie.chancesAttack
+import it.stradivarius.t9ahowtodie.chancesSave
+import it.stradivarius.t9ahowtodie.probabilitySumEqualsOnNDice
 
 // whether to calculate also when the sum of N dice equals precisely a number
 const val TEST_SUM_EQUALS = false
@@ -217,7 +214,8 @@ class StatsViewModel: ViewModel() {
                     moreThan = false
                 ),
                 modifier = testStatsState.value.testModifier
-            ))
+            )
+            )
         testStatsState.value =
             testStatsState.value.copy(probabilityGeq =
                 calculateTestProbability(
@@ -230,7 +228,8 @@ class StatsViewModel: ViewModel() {
                         moreThan = true
                     ),
                     modifier = testStatsState.value.testModifier
-                ))
+                )
+            )
         if ( TEST_SUM_EQUALS ) // This won't be needed most of the times
             testStatsState.value =
                 testStatsState.value.copy(probabilityEq =
@@ -240,7 +239,8 @@ class StatsViewModel: ViewModel() {
                             threshold = testStatsState.value.thresholdIdx +
                                     testStatsState.value.diceNumber ),
                         modifier = testStatsState.value.testModifier
-                    ))
+                    )
+                )
     }
 
     /* This function is called on screen startup */

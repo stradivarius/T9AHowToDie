@@ -1,7 +1,6 @@
-package com.example.t9ahowtodie.ui.components
+package it.stradivarius.t9ahowtodie.ui.components
 
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -10,9 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -39,14 +36,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.t9ahowtodie.ui.D6
-import com.example.t9ahowtodie.ui.theme.T9AHowToDieTheme
+import it.stradivarius.t9ahowtodie.ui.D6
+import it.stradivarius.t9ahowtodie.ui.theme.T9AHowToDieTheme
 import java.lang.Integer.min
 import java.util.ArrayList
 
@@ -98,7 +94,8 @@ fun TextFieldNumber(
             else if (it.length <= maxDigits) currentValue = it
             else if (it.length == maxDigits + 1 && maxDigits == 1) // This is a workaround
                 currentValue = it[maxDigits].toString()
-            else if (it.toInt() > maxVal) currentValue = maxVal.toString()
+
+            if (currentValue.toInt() > maxVal) currentValue = maxVal.toString()
             textChangedCallback(currentValue)
         },
         textStyle = TextStyle.Default.copy(fontSize = 24.sp,
