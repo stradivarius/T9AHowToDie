@@ -67,7 +67,14 @@ fun TestStats(navHostController: NavHostController, viewModel: StatsViewModel) {
                 maxDigits = MAX_TEST_DIGITS,
                 maxVal = 5,
                 textChangedCallback = {
-                viewModel.onTest(TestStatsStateEvents.diceNumberEntered(Integer.parseInt(it)))
+                    try {
+                        viewModel.onTest(
+                            TestStatsStateEvents
+                                .diceNumberEntered(Integer.parseInt(it))
+                        )
+                    } catch (e: NumberFormatException) {
+                        // bypass
+                    }
             })
         }
 

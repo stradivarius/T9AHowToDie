@@ -90,7 +90,7 @@ fun TextFieldNumber(
     TextField(
         value = currentValue,
         onValueChange = {// Otherwise just use "it"
-            if (it.isEmpty()) currentValue = "1"
+            if (it.isEmpty() or (it.toIntOrNull() == null)) currentValue = "1"
             else if (it.length <= maxDigits) currentValue = it
             else if (it.length == maxDigits + 1 && maxDigits == 1) // This is a workaround
                 currentValue = it[maxDigits].toString()

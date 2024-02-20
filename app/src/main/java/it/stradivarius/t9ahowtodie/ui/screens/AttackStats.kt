@@ -73,9 +73,14 @@ fun AttackStats(navHostController: NavHostController, viewModel: StatsViewModel)
             TextFieldNumber ( // Call the result update whenever changing the number of attacks
                 maxDigits = MAX_ATTACKS_DIGITS,
                 textChangedCallback = {
-                viewModel.onAttack(
-                    AttackStatsStateEvents.attacksNumberEntered(Integer.parseInt(it))
-                )
+                    try {
+                        viewModel.onAttack(
+                            AttackStatsStateEvents
+                                .attacksNumberEntered(Integer.parseInt(it))
+                        )
+                    } catch (e: NumberFormatException) {
+                        // bypass
+                    }
             })
         }
 
