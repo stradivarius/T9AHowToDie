@@ -5,14 +5,14 @@ plugins {
 
 android {
     namespace = "it.stradivarius.t9ahowtodie"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "it.stradivarius.t9ahowtodie"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 36
         versionCode = 2
-        versionName = "0.97 Beta"
+        versionName = "1.0 Release"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

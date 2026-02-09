@@ -205,7 +205,7 @@ fun calculateAttackBaseProbabilitySixes(chances : Double, modifier : Int = NORMA
                 chanceTot = (chances / D6)
             }
             REROLL_FAILED -> {
-                chanceSixes = ( (1.0 / D6) + ( (1.0 - (chances / D6)) * (1 / D6) ) )
+                chanceSixes = ( (1.0 / D6) + ( (1.0 - (chances / D6)) * (1.0 / D6) ) )
                 chanceTot = ( (chances / D6) + ( (1.0 - (chances / D6)) * (chances / D6) ) )
             }
             REROLL_SUCCESS -> {
