@@ -11,7 +11,7 @@ android {
         applicationId = "it.stradivarius.t9ahowtodie"
         minSdk = 24
         targetSdk = 36
-        versionCode = 2
+        versionCode = 4
         versionName = "1.0 Release"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
